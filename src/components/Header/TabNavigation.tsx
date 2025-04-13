@@ -27,7 +27,7 @@ export default function TabNavigation({ tabs }: TabNavigationProps) {
               className="body1 relative px-1 pb-2 text-[var(--text-primary)]
                         data-[state=active]:shadow-none
                         after:absolute after:inset-x-0 after:bottom-0 after:h-[1px] 
-                        after:bg-transparent data-[state=active]:after:bg-[var(--color-primary)] 
+                        after:bg-transparent data-[state=active]:after:bg-palette-primary 
                         after:transition-colors cursor-pointer">
               {tab.label}
             </TabsTrigger>

@@ -3,19 +3,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-  /* Color Palette */
-  --color-primary: #4880ee;
-  --color-red: #e84118;
-  --color-gray: #dadada;
-  --color-light-gray: #f2f4f6;
-  --color-black: #222222;
-  --color-white: #ffffff;
+@theme {
+  --color-palette-primary: #4880ee;
+  --color-palette-red: #e84118;
+  --color-palette-gray: #dadada;
+  --color-palette-light-gray: #f2f4f6;
+  --color-palette-black: #222222;
+  --color-palette-white: #ffffff;
 
-  /* Text Colors */
   --text-primary: #353c49;
   --text-secondary: #6d7582;
+  --text-title: #1a1e27;
   --text-subtitle: #8d94a0;
+}
+:root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
