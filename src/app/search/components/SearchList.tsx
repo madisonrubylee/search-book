@@ -1,22 +1,36 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { Book } from "@/types";
 import Image from "next/image";
-
-// 임시 타입 정의
-interface Book {
-  id: string;
-  title: string;
-  imageUrl: string;
-  price: number;
-  originalPrice?: number;
-  category: string;
-}
+import { CollapsedBookItem } from "./CollapsedBookItem";
+import { ExpandedBookItem } from "./ExpandedBookItem";
 
 interface SearchListProps {
   books: Book[];
 }
 
-export function SearchList({ books }: SearchListProps) {
+export default function SearchList({ books }: SearchListProps) {
+  const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const [likedBooks, setLikedBooks] = useState<string[]>([]);
+
+  // TODO: 전역 상태관리 ?
+  useEffect(() => {
+    const saved = localStorage.getItem("likedBooks");
+    if (saved) {
+      setLikedBooks(JSON.parse(saved));
+    }
+  }, []);
+
+  const toggleLike = (isbn: string) => {
+    const newLikedBooks = likedBooks.includes(isbn)
+      ? likedBooks.filter((id) => id !== isbn)
+      : [...likedBooks, isbn];
+
+    setLikedBooks(newLikedBooks);
+    localStorage.setItem("likedBooks", JSON.stringify(newLikedBooks));
+  };
+
   if (books.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
@@ -34,42 +48,30 @@ export function SearchList({ books }: SearchListProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div>
       {books.map((book) => (
-        <div
-          key={book.id}
-          className="flex gap-4 p-4 border border-gray-200 rounded-lg">
-          <div className="w-24 h-32 relative flex-shrink-0">
-            <Image
-              src={book.imageUrl}
-              alt={book.title}
-              fill
-              className="object-cover rounded-md"
-            />
-          </div>
-
-          <div className="flex-1">
-            <h3 className="font-medium mb-2">{book.title}</h3>
-            <p className="text-sm text-gray-600 mb-2">{book.category}</p>
-            <div className="flex items-center gap-2">
-              {book.originalPrice && (
-                <span className="text-sm text-gray-400 line-through">
-                  {book.originalPrice.toLocaleString()}원
-                </span>
-              )}
-              <span className="font-medium">
-                {book.price.toLocaleString()}원
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm">
-              구매하기
-            </button>
-            <button className="px-4 py-2 border border-gray-200 rounded-lg text-sm">
-              상세보기
-            </button>
+        <div key={book.isbn} className="border-b border-gray-200">
+          <div
+            className={`transform-gpu transition-all duration-500 ease-in-out`}>
+            {expandedItem === book.isbn ? (
+              <div className="animate-fadeIn">
+                <ExpandedBookItem
+                  book={book}
+                  isLiked={likedBooks.includes(book.isbn)}
+                  onToggleLike={toggleLike}
+                  onCollapse={() => setExpandedItem(null)}
+                />
+              </div>
+            ) : (
+              <div className="animate-fadeIn">
+                <CollapsedBookItem
+                  book={book}
+                  isLiked={likedBooks.includes(book.isbn)}
+                  onToggleLike={toggleLike}
+                  onExpand={() => setExpandedItem(book.isbn)}
+                />
+              </div>
+            )}
           </div>
         </div>
       ))}

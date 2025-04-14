@@ -11,10 +11,10 @@
   --color-palette-black: #222222;
   --color-palette-white: #ffffff;
 
-  --text-primary: #353c49;
-  --text-secondary: #6d7582;
-  --text-title: #1a1e27;
-  --text-subtitle: #8d94a0;
+  --color-text-primary: #353c49;
+  --color-text-secondary: #6d7582;
+  --color-text-title: #1a1e27;
+  --color-text-subtitle: #8d94a0;
 }
 :root {
   --radius: 0.625rem;
@@ -58,51 +58,59 @@
 
 /* Typography */
 .title1 {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 24px;
 }
 
 .title2 {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 22px;
 }
 
 .title3 {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 18px;
 }
 
 .body1 {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 500;
   font-size: 20px;
 }
 
 .body2 {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 500;
   font-size: 14px;
 }
 
 .body2-bold {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 14px;
 }
 
 .caption {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 500;
   font-size: 16px;
 }
 
-.small {
-  font-family: "Noto Sans KR", sans-serif;
+.caption-medium {
   font-weight: 500;
+  font-size: 14px;
+}
+
+.small {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.H3-bold {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.tiny-medium {
   font-size: 10px;
+  font-weight: 500;
 }
 
 body {

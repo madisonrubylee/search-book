@@ -19,7 +19,7 @@ export default function TabNavigation({ tabs }: TabNavigationProps) {
 
   return (
     <Tabs value={pathname.split("/")[1] || "search"} className="w-fit">
-      <TabsList className="border-0 bg-transparent p-0 h-auto gap-8">
+      <TabsList className="border-0 bg-transparent p-0 h-auto gap-4 sm:gap-8">
         {tabs.map((tab) => (
           <Link key={tab.value} href={tab.href} className="focus:outline-none">
             <TabsTrigger
@@ -28,7 +28,8 @@ export default function TabNavigation({ tabs }: TabNavigationProps) {
                         data-[state=active]:shadow-none
                         after:absolute after:inset-x-0 after:bottom-0 after:h-[1px] 
                         after:bg-transparent data-[state=active]:after:bg-palette-primary 
-                        after:transition-colors cursor-pointer">
+                        after:transition-colors cursor-pointer
+                        text-sm sm:text-base">
               {tab.label}
             </TabsTrigger>
           </Link>
