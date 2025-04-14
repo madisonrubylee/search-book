@@ -11,7 +11,8 @@ import { useSearchBooks } from "./api/searchBooks";
 import Image from "next/image";
 import { SEARCH_CONFIG } from "@/app/types/search";
 import { SearchResponse } from "@/app/types/search";
-// 컴포넌트 분리
+import { useSearchHistory } from "@/hooks/useSearchHistory";
+
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-20">
     <div className="w-16 h-16 bg-[#B7E4E7] rounded-full flex items-center justify-center mb-3">
@@ -41,6 +42,7 @@ const SearchContent = ({ query, data, isLoading }: SearchContentProps) => {
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(SEARCH_CONFIG.INITIAL_PAGE);
+  const { searchHistory, addToHistory, removeFromHistory } = useSearchHistory();
 
   const { data, isLoading } = useSearchBooks({
     query,
@@ -52,12 +54,19 @@ export default function SearchPage() {
   const handleSearch = (searchQuery: string) => {
     setQuery(searchQuery);
     setPage(SEARCH_CONFIG.INITIAL_PAGE);
+    addToHistory(searchQuery);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       <h2 className="title2 text-title font-medium mb-4">도서 검색</h2>
-      <SearchInput onSearch={handleSearch} />
+      <SearchInput
+        value={query}
+        onChange={setQuery}
+        onSearch={handleSearch}
+        searchHistory={searchHistory}
+        onRemoveHistory={removeFromHistory}
+      />
       <SearchResultCount count={data?.meta.total_count || 0} />
       <SearchContent query={query} data={data} isLoading={isLoading} />
     </div>

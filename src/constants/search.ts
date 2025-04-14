@@ -1,0 +1,1 @@
+export const MAX_SEARCH_HISTORY_ITEMS = 8;
