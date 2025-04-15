@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Book } from "@/types";
+import { formatPrice } from "@/utils/format";
 
 interface ExpandedBookItemProps {
   book: Book;
@@ -85,7 +86,7 @@ export default function ExpandedBookItem({
               <div className="flex flex-row gap-2 items-center">
                 <p className="tiny-medium text-text-subtitle ">판매가</p>
                 <span className="font-[17px] font-weight-[350] text-text-primary line-through">
-                  {book.price.toLocaleString()}원
+                  {formatPrice(book.price)}
                 </span>
               </div>
             ) : (
@@ -94,7 +95,7 @@ export default function ExpandedBookItem({
                   <div className="flex flex-row gap-2 items-center">
                     <p className="tiny-medium text-text-subtitle ">원가</p>
                     <span className="font-[17px] font-weight-[350] text-text-primary line-through">
-                      {book.price.toLocaleString()}원
+                      {formatPrice(book.price)}
                     </span>
                   </div>
                 )}
@@ -102,7 +103,7 @@ export default function ExpandedBookItem({
                   <div className="flex flex-row gap-2 items-center">
                     <p className="tiny-medium text-text-subtitle">판매가</p>
                     <span className="H3-bold text-text-primary">
-                      {book.sale_price.toLocaleString()}원
+                      {formatPrice(book.sale_price)}
                     </span>
                   </div>
                 )}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Book } from "@/types";
+import { formatPrice } from "@/utils/format";
 
 interface CollapsedBookItemProps {
   book: Book;
@@ -56,10 +57,7 @@ export default function CollapsedBookItem({
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <span className="title3 text-primary whitespace-nowrap">
-            {book.sale_price === -1
-              ? book.price.toLocaleString()
-              : book.sale_price.toLocaleString()}
-            원
+            {formatPrice(book.sale_price === -1 ? book.price : book.sale_price)}
           </span>
           <div className="flex gap-2 w-full">
             <button className="w-full sm:w-[115px] h-[48px] px-4 py-2 bg-palette-primary caption text-palette-white rounded-[8px]">
