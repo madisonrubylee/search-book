@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   SearchInput,
   SearchResultCount,
@@ -12,8 +12,9 @@ import Image from "next/image";
 import { SEARCH_CONFIG, SearchFilters, SearchTarget } from "@/types/search";
 import { Book } from "@/types/book";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
-const EmptyState = () => (
+const HasNoResult = () => (
   <div className="flex flex-col items-center justify-center py-20">
     <div className="w-16 h-16 bg-[#B7E4E7] rounded-full flex items-center justify-center mb-3">
       <Image
@@ -36,10 +37,9 @@ export default function SearchPage() {
     sort: "accuracy",
     target: "title",
   });
+  const [showTopButton, setShowTopButton] = useState(false);
 
   const { searchHistory, addToHistory, removeFromHistory } = useSearchHistory();
-
-  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const { data, isLoading } = useSearchBooks({
     query,
@@ -66,54 +66,24 @@ export default function SearchPage() {
     setIsEnd(false);
   }, [query, searchFilters.sort, searchFilters.target]);
 
-  const handleIntersect = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && !isLoading && !isEnd && query !== "") {
-        setPage((prev) => prev + 1);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowTopButton(true);
+      } else {
+        setShowTopButton(false);
       }
-    },
-    [isLoading, isEnd, query]
-  );
-
-  useEffect(() => {
-    if (books.length === 0 || isLoading) return;
-
-    const currentRef = loadMoreRef.current;
-    if (!currentRef) {
-      console.log("loadMoreRef가 없음 - books:", books.length);
-      return;
-    }
-
-    console.log("Observer 새로 설정:", {
-      booksLength: books.length,
-      isLoading,
-      isEnd,
-      page,
-      hasRef: !!currentRef,
-    });
-
-    const observer = new IntersectionObserver(handleIntersect, {
-      root: null,
-      rootMargin: "100px",
-      threshold: 0,
-    });
-
-    observer.observe(currentRef);
-
-    return () => {
-      observer.disconnect();
     };
-  }, [books.length, handleIntersect, isLoading]);
 
-  useEffect(() => {
-    console.log("데이터 상태:", {
-      booksLength: books.length,
-      isLoading,
-      isEnd,
-      page,
-      query,
-    });
-  }, [books.length, isLoading, isEnd, page, query]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const loadMoreRef = useInfiniteScroll(() => setPage((prev) => prev + 1), {
+    isLoading,
+    isEnd,
+    query,
+  });
 
   const handleSearch = (searchQuery: string, type?: string) => {
     setQuery(searchQuery);
@@ -121,6 +91,13 @@ export default function SearchPage() {
       setSearchFilters((prev) => ({ ...prev, target: type as SearchTarget }));
     }
     addToHistory(searchQuery);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -136,7 +113,7 @@ export default function SearchPage() {
         label="도서 검색 결과"
       />
       {query === "" || books.length === 0 ? (
-        <EmptyState />
+        <HasNoResult />
       ) : isLoading && page === 1 ? (
         <SearchListSkeleton />
       ) : (
@@ -144,8 +121,23 @@ export default function SearchPage() {
           <SearchList books={books} />
           <div
             ref={loadMoreRef}
-            className="h-20 flex items-center justify-center mt-4 bg-gray-50 border-t border-gray-200"></div>
+            className="h-20 flex items-center justify-center mt-4 bg-gray-50 border-t border-gray-200"
+          />
         </div>
+      )}
+
+      {showTopButton && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-palette-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
+          aria-label="페이지 상단으로 이동">
+          <Image
+            src="/static/images/arrow-up.png"
+            alt="위로 이동"
+            width={24}
+            height={24}
+          />
+        </button>
       )}
     </div>
   );
