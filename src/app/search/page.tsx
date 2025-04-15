@@ -9,8 +9,8 @@ import {
 } from "./components";
 import { useSearchBooks } from "./api/searchBooks";
 import Image from "next/image";
-import { SEARCH_CONFIG } from "@/app/types/search";
-import { SearchResponse } from "@/app/types/search";
+import { SEARCH_CONFIG } from "@/types/search";
+import { SearchResponse } from "@/types/search";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 
 const EmptyState = () => (

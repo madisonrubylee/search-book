@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Book } from "@/types";
 import Image from "next/image";
-import { CollapsedBookItem } from "./CollapsedBookItem";
-import { ExpandedBookItem } from "./ExpandedBookItem";
+import { CollapsedBookItem, ExpandedBookItem } from "./index";
 import { toast } from "sonner";
+import { useLikedBooks } from "@/hooks/useLikedBooks";
 
 interface SearchListProps {
   books: Book[];
@@ -17,14 +17,7 @@ export default function SearchList({
   onLikedBooksChange,
 }: SearchListProps) {
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
-  const [likedBooks, setLikedBooks] = useState<Book[]>([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("likedBooks");
-    if (saved) {
-      setLikedBooks(JSON.parse(saved));
-    }
-  }, []);
+  const { likedBooks, updateLikedBooks } = useLikedBooks();
 
   const toggleLike = (isbn: string) => {
     const book = books.find((b) => b.isbn === isbn);
@@ -35,8 +28,7 @@ export default function SearchList({
       ? likedBooks.filter((b) => b.isbn !== isbn)
       : [...likedBooks, book];
 
-    setLikedBooks(newLikedBooks);
-    localStorage.setItem("likedBooks", JSON.stringify(newLikedBooks));
+    updateLikedBooks(newLikedBooks);
     onLikedBooksChange?.(newLikedBooks);
 
     toast(

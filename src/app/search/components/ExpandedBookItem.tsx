@@ -8,7 +8,7 @@ interface ExpandedBookItemProps {
   onCollapse: () => void;
 }
 
-export function ExpandedBookItem({
+export default function ExpandedBookItem({
   book,
   isLiked,
   onToggleLike,
