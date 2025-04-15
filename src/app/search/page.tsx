@@ -76,7 +76,10 @@ export default function SearchPage() {
         searchHistory={searchHistory}
         onRemoveHistory={removeFromHistory}
       />
-      <SearchResultCount count={data?.meta.total_count || 0} />
+      <SearchResultCount
+        count={data?.meta.total_count || 0}
+        label="도서 검색 결과"
+      />
       <SearchContent query={query} data={data} isLoading={isLoading} />
     </div>
   );

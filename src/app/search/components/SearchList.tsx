@@ -8,11 +8,15 @@ import { ExpandedBookItem } from "./ExpandedBookItem";
 
 interface SearchListProps {
   books: Book[];
+  onLikedBooksChange?: (newLikedBooks: Book[]) => void;
 }
 
-export default function SearchList({ books }: SearchListProps) {
+export default function SearchList({
+  books,
+  onLikedBooksChange,
+}: SearchListProps) {
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
-  const [likedBooks, setLikedBooks] = useState<string[]>([]);
+  const [likedBooks, setLikedBooks] = useState<Book[]>([]);
 
   // TODO: 전역 상태관리 ?
   useEffect(() => {
@@ -23,12 +27,16 @@ export default function SearchList({ books }: SearchListProps) {
   }, []);
 
   const toggleLike = (isbn: string) => {
-    const newLikedBooks = likedBooks.includes(isbn)
-      ? likedBooks.filter((id) => id !== isbn)
-      : [...likedBooks, isbn];
+    const book = books.find((b) => b.isbn === isbn);
+    if (!book) return;
+
+    const newLikedBooks = likedBooks.some((b) => b.isbn === isbn)
+      ? likedBooks.filter((b) => b.isbn !== isbn)
+      : [...likedBooks, book];
 
     setLikedBooks(newLikedBooks);
     localStorage.setItem("likedBooks", JSON.stringify(newLikedBooks));
+    onLikedBooksChange?.(newLikedBooks);
   };
 
   if (books.length === 0) {
@@ -57,7 +65,7 @@ export default function SearchList({ books }: SearchListProps) {
               <div className="animate-fadeIn">
                 <ExpandedBookItem
                   book={book}
-                  isLiked={likedBooks.includes(book.isbn)}
+                  isLiked={likedBooks.some((b) => b.isbn === book.isbn)}
                   onToggleLike={toggleLike}
                   onCollapse={() => setExpandedItem(null)}
                 />
@@ -66,7 +74,7 @@ export default function SearchList({ books }: SearchListProps) {
               <div className="animate-fadeIn">
                 <CollapsedBookItem
                   book={book}
-                  isLiked={likedBooks.includes(book.isbn)}
+                  isLiked={likedBooks.some((b) => b.isbn === book.isbn)}
                   onToggleLike={toggleLike}
                   onExpand={() => setExpandedItem(book.isbn)}
                 />

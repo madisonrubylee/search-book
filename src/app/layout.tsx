@@ -16,9 +16,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       href: "/search",
     },
     {
-      value: "my-books",
+      value: "favorites",
       label: "내가 찜한 책",
-      href: "/my-books",
+      href: "/favorites",
     },
   ];
 
