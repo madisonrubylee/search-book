@@ -5,6 +5,7 @@ import "./globals.css";
 import { TabNavigation } from "@/components/Header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </header>
           <main className="pt-24 sm:pt-20 min-h-screen">{children}</main>
         </QueryClientProvider>
+        <Toaster position="top-center" />
       </body>
     </html>
   );

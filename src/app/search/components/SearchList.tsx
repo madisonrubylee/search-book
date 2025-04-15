@@ -5,6 +5,7 @@ import { Book } from "@/types";
 import Image from "next/image";
 import { CollapsedBookItem } from "./CollapsedBookItem";
 import { ExpandedBookItem } from "./ExpandedBookItem";
+import { toast } from "sonner";
 
 interface SearchListProps {
   books: Book[];
@@ -18,7 +19,6 @@ export default function SearchList({
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const [likedBooks, setLikedBooks] = useState<Book[]>([]);
 
-  // TODO: 전역 상태관리 ?
   useEffect(() => {
     const saved = localStorage.getItem("likedBooks");
     if (saved) {
@@ -30,13 +30,23 @@ export default function SearchList({
     const book = books.find((b) => b.isbn === isbn);
     if (!book) return;
 
-    const newLikedBooks = likedBooks.some((b) => b.isbn === isbn)
+    const isCurrentlyLiked = likedBooks.some((b) => b.isbn === isbn);
+    const newLikedBooks = isCurrentlyLiked
       ? likedBooks.filter((b) => b.isbn !== isbn)
       : [...likedBooks, book];
 
     setLikedBooks(newLikedBooks);
     localStorage.setItem("likedBooks", JSON.stringify(newLikedBooks));
     onLikedBooksChange?.(newLikedBooks);
+
+    toast(
+      isCurrentlyLiked
+        ? "내가 찜한 책에서 제외되었습니다."
+        : "내가 찜한 책에 추가되었습니다.",
+      {
+        duration: 1500,
+      }
+    );
   };
 
   if (books.length === 0) {
