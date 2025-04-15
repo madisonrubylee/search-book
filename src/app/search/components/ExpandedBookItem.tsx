@@ -22,6 +22,7 @@ export default function ExpandedBookItem({
           src={book.thumbnail || "/static/images/book.png"}
           alt={book.title}
           fill
+          sizes="(max-width: 640px) 100vw, 210px"
           quality={100}
           className="object-contain"
           onError={(e) => {
@@ -75,6 +76,7 @@ export default function ExpandedBookItem({
                 alt="상세보기"
                 width={12}
                 height={12}
+                style={{ width: "auto", height: "auto" }}
               />
             </>
           </button>

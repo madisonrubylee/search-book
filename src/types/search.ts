@@ -6,6 +6,10 @@ export const SEARCH_CONFIG = {
 
 export type SearchSort = "accuracy" | "latest";
 export type SearchTarget = "title" | "isbn" | "publisher" | "person";
+export interface SearchFilters {
+  sort: SearchSort;
+  target: SearchTarget;
+}
 
 export interface SearchParams {
   query: string;

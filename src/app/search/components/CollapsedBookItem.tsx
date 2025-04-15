@@ -21,6 +21,7 @@ export default function CollapsedBookItem({
           src={book.thumbnail || "/static/images/book.png"}
           alt={book.title}
           fill
+          sizes="48px"
           quality={100}
           className="object-contain"
           onError={(e) => {
@@ -74,6 +75,7 @@ export default function CollapsedBookItem({
                   alt="상세보기"
                   width={12}
                   height={12}
+                  style={{ width: "auto", height: "auto" }}
                 />
               </>
             </button>

@@ -49,7 +49,7 @@ export function useSearchBooks({
   target,
 }: SearchParams) {
   return useQuery({
-    queryKey: ["books", query, sort, page, size, target],
+    queryKey: ["books", query, sort, page, target],
     queryFn: async () => {
       const params = new URLSearchParams({
         query,
@@ -69,9 +69,11 @@ export function useSearchBooks({
           },
         }
       );
+
       if (!response.ok) {
         throw new Error("API 요청 실패");
       }
+
       return response.json();
     },
     enabled: query !== "",

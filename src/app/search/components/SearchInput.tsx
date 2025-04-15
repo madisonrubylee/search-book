@@ -3,22 +3,25 @@
 import { SearchIcon } from "@/assets/icons";
 import { Input } from "@/components/ui/input";
 import { useState, useRef, useEffect } from "react";
-import { useSearchHistory } from "@/hooks/useSearchHistory";
 import { SearchHistoryList } from "./SearchHistoryList";
-
 import { DetailSearchPopover } from "./DetailSearchPopover";
 import { DETAIL_SEARCH_OPTIONS } from "@/constants";
 
 interface SearchInputProps {
   onSearch: (query: string, type?: string) => void;
+  searchHistory: string[];
+  onRemoveHistory: (item: string) => void;
 }
 
-export default function SearchInput({ onSearch }: SearchInputProps) {
+export default function SearchInput({
+  onSearch,
+  searchHistory,
+  onRemoveHistory,
+}: SearchInputProps) {
   const [query, setQuery] = useState("");
   const [detailQuery, setDetailQuery] = useState("");
   const [isHistoryVisible, setIsHistoryVisible] = useState(false);
-  const { searchHistory, addToHistory, removeFromHistory } = useSearchHistory();
-  const inputRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLFormElement>(null);
   const [searchType, setSearchType] = useState("title");
 
   const handleSearch = () => {
@@ -47,7 +50,6 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
     e.preventDefault();
     if (query.trim()) {
       onSearch(query);
-      addToHistory(query);
       setIsHistoryVisible(false);
     }
   };
@@ -81,7 +83,7 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
             <SearchHistoryList
               searchHistory={searchHistory}
               onItemClick={handleHistoryItemClick}
-              onRemoveItem={removeFromHistory}
+              onRemoveItem={onRemoveHistory}
             />
           )}
         </div>

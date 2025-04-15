@@ -10,10 +10,10 @@ export default function SearchResultCount({
   label,
 }: SearchResultCountProps) {
   return (
-    <div className="mb-8">
-      <p className="text-sm text-gray-600">
+    <div className="mb-8 text-text-primary">
+      <p className="caption">
         {label}
-        <span className="text-gray-900 ml-2">
+        <span className=" ml-2">
           총 <span className="text-palette-primary">{count}</span>건
         </span>
       </p>
