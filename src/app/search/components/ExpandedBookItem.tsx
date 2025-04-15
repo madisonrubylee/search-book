@@ -16,8 +16,8 @@ export function ExpandedBookItem({
 }: ExpandedBookItemProps) {
   console.log("book", book);
   return (
-    <div className="flex gap-4 flex-row py-5 px-4">
-      <div className="relative w-[210px] h-[280px] flex-shrink-0">
+    <div className="flex gap-4 flex-col sm:flex-row py-5">
+      <div className="relative w-full sm:w-[210px] h-[280px] flex-shrink-0">
         <Image
           src={book.thumbnail || "/static/images/book.png"}
           alt={book.title}
@@ -45,11 +45,11 @@ export function ExpandedBookItem({
         </button>
       </div>
 
-      <div className="flex flex-row justify-between flex-1">
-        <div className="flex flex-col flex-1 max-w-[600px] space-y-2">
+      <div className="flex flex-col sm:flex-row justify-between flex-1">
+        <div className="flex flex-col flex-1 max-w-full sm:max-w-[600px] space-y-2">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
-            <h3 className="H3-bold truncate">{book.title}</h3>
-            <p className="caption-medium text-text-subtitle truncate">
+            <h3 className="H3-bold w-full sm:w-auto truncate">{book.title}</h3>
+            <p className="caption-medium text-text-subtitle w-full sm:w-auto truncate">
               {book.authors}
             </p>
           </div>
@@ -64,10 +64,10 @@ export function ExpandedBookItem({
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-col justify-start sm:justify-between gap-2 items-end">
+        <div className="flex flex-col justify-start sm:justify-between gap-2 items-center sm:items-end w-full sm:w-auto">
           <button
             onClick={onCollapse}
-            className="w-[115px] h-[48px] px-4 bg-palette-light-gray text-text-secondary rounded-[8px] flex items-center gap-2">
+            className="w-full sm:w-[115px] h-[48px] px-4 bg-palette-light-gray text-text-secondary rounded-[8px] flex items-center justify-center gap-2">
             <>
               상세보기
               <Image
@@ -78,11 +78,11 @@ export function ExpandedBookItem({
               />
             </>
           </button>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 w-full sm:w-auto items-center sm:items-end">
             {book.sale_price === -1 ? (
-              <div className="flex flex-row gap-2 items-center justify-end">
+              <div className="flex flex-row gap-2 items-center">
                 <p className="tiny-medium text-text-subtitle ">판매가</p>
-                <span className="H3-bold text-text-primary">
+                <span className="font-[17px] font-weight-[350] text-text-primary line-through">
                   {book.price.toLocaleString()}원
                 </span>
               </div>
@@ -107,7 +107,7 @@ export function ExpandedBookItem({
               </div>
             )}
 
-            <button className="w-[90px] sm:w-[240px] h-[40px] sm:h-[48px] px-2 sm:px-4 py-2 bg-palette-primary caption text-palette-white rounded-[8px]">
+            <button className="w-full sm:w-[240px] h-[40px] sm:h-[48px] px-2 sm:px-4 py-2 bg-palette-primary caption text-palette-white rounded-[8px]">
               구매하기
             </button>
           </div>

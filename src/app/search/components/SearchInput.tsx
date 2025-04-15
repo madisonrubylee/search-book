@@ -6,15 +6,28 @@ import { useState, useRef, useEffect } from "react";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 import { SearchHistoryList } from "./SearchHistoryList";
 
+import { DetailSearchPopover } from "./DetailSearchPopover";
+import { DETAIL_SEARCH_OPTIONS } from "@/constants";
+
 interface SearchInputProps {
-  onSearch: (query: string) => void;
+  onSearch: (query: string, type?: string) => void;
 }
 
 export default function SearchInput({ onSearch }: SearchInputProps) {
   const [query, setQuery] = useState("");
+  const [detailQuery, setDetailQuery] = useState("");
   const [isHistoryVisible, setIsHistoryVisible] = useState(false);
   const { searchHistory, addToHistory, removeFromHistory } = useSearchHistory();
   const inputRef = useRef<HTMLDivElement>(null);
+  const [searchType, setSearchType] = useState("title");
+
+  const handleSearch = () => {
+    if (detailQuery.trim()) {
+      onSearch(detailQuery, searchType);
+      setQuery(detailQuery);
+      setDetailQuery("");
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -59,7 +72,7 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
               isHistoryVisible && searchHistory.length > 0
                 ? "rounded-t-[24px] rounded-b-none"
                 : "rounded-[100px]"
-            }  placeholder:text-text-subtitle placeholder:caption`}
+            } placeholder:text-text-subtitle placeholder:caption`}
           />
           <div className="absolute left-2 top-[45%] -translate-y-1/2 flex items-center pointer-events-none">
             <SearchIcon className="w-7 h-7 text-palette-black" />
@@ -73,11 +86,14 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
           )}
         </div>
 
-        <button
-          type="submit"
-          className="px-4 py-2 rounded-lg border border-gray-200 text-text-subtitle text-sm">
-          상세검색
-        </button>
+        <DetailSearchPopover
+          searchType={searchType}
+          setSearchType={setSearchType}
+          detailQuery={detailQuery}
+          setDetailQuery={setDetailQuery}
+          handleSearch={handleSearch}
+          searchOptions={DETAIL_SEARCH_OPTIONS}
+        />
       </div>
     </form>
   );

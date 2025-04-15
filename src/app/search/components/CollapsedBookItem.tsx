@@ -44,7 +44,7 @@ export function CollapsedBookItem({
         </button>
       </div>
 
-      <div className="flex flex-col flex-2 sm:flex-row justify-between flex-1 items-start sm:items-center gap-2 sm:gap-0">
+      <div className="flex flex-col flex-2 sm:flex-row justify-between  items-start sm:items-center gap-2 sm:gap-0">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-3 flex-1 max-w-full sm:max-w-[550px]">
           <h3 className="H3-bold sm:truncate w-full sm:w-auto max-w-[600px] line-clamp-2 sm:line-clamp-1">
             {book.title}

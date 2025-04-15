@@ -42,18 +42,27 @@ const SearchContent = ({ query, data, isLoading }: SearchContentProps) => {
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(SEARCH_CONFIG.INITIAL_PAGE);
+  const [searchFilters, setSearchFilters] = useState({
+    sort: "accuracy",
+    target: "title",
+  });
+
   const { searchHistory, addToHistory, removeFromHistory } = useSearchHistory();
 
   const { data, isLoading } = useSearchBooks({
     query,
     page,
-    sort: SEARCH_CONFIG.SORT,
+    sort: searchFilters.sort,
+    target: searchFilters.target,
     size: SEARCH_CONFIG.PAGE_SIZE,
   });
 
-  const handleSearch = (searchQuery: string) => {
+  const handleSearch = (searchQuery: string, filters?: SearchFilters) => {
     setQuery(searchQuery);
     setPage(SEARCH_CONFIG.INITIAL_PAGE);
+    if (filters) {
+      setSearchFilters(filters);
+    }
     addToHistory(searchQuery);
   };
 
