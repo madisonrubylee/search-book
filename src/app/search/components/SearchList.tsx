@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Book } from "@/types";
 import Image from "next/image";
 import { CollapsedBookItem, ExpandedBookItem } from "./index";
@@ -19,27 +19,30 @@ export default function SearchList({
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const { likedBooks, updateLikedBooks } = useLikedBooks();
 
-  const toggleLike = (isbn: string) => {
-    const book = books.find((b) => b.isbn === isbn);
-    if (!book) return;
+  const toggleLike = useCallback(
+    (isbn: string) => {
+      const book = books.find((b) => b.isbn === isbn);
+      if (!book) return;
 
-    const isCurrentlyLiked = likedBooks.some((b) => b.isbn === isbn);
-    const newLikedBooks = isCurrentlyLiked
-      ? likedBooks.filter((b) => b.isbn !== isbn)
-      : [...likedBooks, book];
+      const isCurrentlyLiked = likedBooks.some((b) => b.isbn === isbn);
+      const newLikedBooks = isCurrentlyLiked
+        ? likedBooks.filter((b) => b.isbn !== isbn)
+        : [...likedBooks, book];
 
-    updateLikedBooks(newLikedBooks);
-    onLikedBooksChange?.(newLikedBooks);
+      updateLikedBooks(newLikedBooks);
+      onLikedBooksChange?.(newLikedBooks);
 
-    toast(
-      isCurrentlyLiked
-        ? "내가 찜한 책에서 제외되었습니다."
-        : "내가 찜한 책에 추가되었습니다.",
-      {
-        duration: 1500,
-      }
-    );
-  };
+      toast(
+        isCurrentlyLiked
+          ? "내가 찜한 책에서 제외되었습니다."
+          : "내가 찜한 책에 추가되었습니다.",
+        {
+          duration: 1500,
+        }
+      );
+    },
+    [books, likedBooks, updateLikedBooks, onLikedBooksChange]
+  );
 
   if (books.length === 0) {
     return (

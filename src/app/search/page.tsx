@@ -13,6 +13,7 @@ import { SEARCH_CONFIG, SearchFilters, SearchTarget } from "@/types/search";
 import { Book } from "@/types/book";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { debounce } from "lodash";
 
 const HasNoResult = () => (
   <div className="flex flex-col items-center justify-center py-20">
@@ -100,11 +101,15 @@ export default function SearchPage() {
     });
   };
 
+  const debouncedHandleSearch = debounce((query: string) => {
+    handleSearch(query);
+  }, 300);
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       <h2 className="title2 text-title font-medium mb-4">도서 검색</h2>
       <SearchInput
-        onSearch={handleSearch}
+        onSearch={debouncedHandleSearch}
         searchHistory={searchHistory}
         onRemoveHistory={removeFromHistory}
       />
